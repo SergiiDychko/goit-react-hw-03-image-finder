@@ -1,19 +1,25 @@
 import PropTypes from 'prop-types';
 import ImageGalleryItem from './ImageGalleryItem';
-import Button from '../Button';
 import { StyledImageGallery } from './ImageGalleryStyles';
 
 
-const ImageGallery = ({ images }) => {
+const ImageGallery = ({galleryArr, toggleModal}) => {
     return (
       <StyledImageGallery class="gallery">
-            {images.map(image => <ImageGalleryItem key={image.id} item={image} />)}
+        {galleryArr.map(el => (
+          <ImageGalleryItem
+            key={el.id}
+            item={el}
+            toggleModal={toggleModal}
+          />
+        ))}
       </StyledImageGallery>
     );
-};
+  };
 
 ImageGallery.propTypes = {
-images: PropTypes.arrayOf()
+  galleryArr: PropTypes.arrayOf().isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;

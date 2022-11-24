@@ -1,18 +1,27 @@
 import PropTypes from 'prop-types';
 import { StyledImageGalleryItem } from './ImageGalleryItemStyles';
 
-const ImageGalleryItem = ({alt, src}) => {
-    return (
-      <StyledImageGalleryItem>
-        <img className="imageGalleryItem-image" src={src} alt={alt} />
-      </StyledImageGalleryItem>
-    );
-
-}
+const ImageGalleryItem = ({ item, toggleModal }) => {
+  const { webformatURL, largeImageURL, tags } = item;
+  return (
+    <StyledImageGalleryItem>
+      <img
+        className="imageGalleryItem-image"
+        src={webformatURL}
+        alt={tags}
+        onClick={() => toggleModal(largeImageURL, tags)}
+      />
+    </StyledImageGalleryItem>
+  );
+};
 
 ImageGalleryItem.propTypes = {
-src: PropTypes.string.isRequired,
-alt: PropTypes.string.isRequired,
+  item: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }).isRequired,
+  alt: PropTypes.string.isRequired,
 };
 
 export default ImageGalleryItem;

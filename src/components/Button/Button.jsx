@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { Children } from 'react';
-import {StyledButton} from './ButtonStyles'
+import { StyledButton } from './ButtonStyles'
 
 
 const Button = ({children, onClick}) => {

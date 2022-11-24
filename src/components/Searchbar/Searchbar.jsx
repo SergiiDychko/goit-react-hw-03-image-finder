@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {StyledSearchbar} from './SearchbarStyles'
 
 const Searchbar = () => {
@@ -21,8 +21,6 @@ const Searchbar = () => {
   );
 };
 
-Searchbar.propTypes = {
-
-}
+// Searchbar.propTypes = { }
 
 export default Searchbar;
