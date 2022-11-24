@@ -15,7 +15,7 @@ class App extends Component {
     // const { } = this.state;
     return (
       <>
-        <p>моя галерея</p>
+        <Searchbar />
       </>
     );
   }
