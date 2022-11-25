@@ -2,14 +2,14 @@ import PropTypes from 'prop-types';
 import { StyledImageGalleryItem } from './ImageGalleryItemStyles';
 
 const ImageGalleryItem = ({ item, toggleModal }) => {
-  const { webformatURL, largeImageURL, tags } = item;
+  const { webformatURL, id } = item;
   return (
     <StyledImageGalleryItem>
       <img
         className="imageGalleryItem-image"
         src={webformatURL}
         alt={tags}
-        onClick={() => toggleModal(largeImageURL, tags)}
+        onClick={() => toggleModal(id)}
       />
     </StyledImageGalleryItem>
   );
