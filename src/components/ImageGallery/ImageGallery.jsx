@@ -1,62 +1,71 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Component } from 'react';
 import ImageGalleryItem from './ImageGalleryItem';
 import { StyledImageGallery } from './ImageGalleryStyles';
 import Modal from '../Modal';
+import { Notify } from 'notiflix';
 
 class ImageGallery extends Component {
   state = {
-    onModal: false,
+    showModal: false,
     modalImageIndex: 0,
   };
+  
+  toggleModal = () => {
+    this.setState(({showModal}) => ({
+      showModal: !showModal,
+    }));
+  }
 
-  toggleModal = ({ imageId }) => {
+  openModal = (imageId) => {
     const { galleryArr } = this.props;
+    this.toggleModal()
     this.setState({
-      onModal: !this.onModal,
-      modalImageIndex: this.modalImgIndex
-        ? ''
-        : galleryArr.indexOf(image => image.id === imageId),
+        modalImageIndex: galleryArr.findIndex(image => image.id === imageId),
     });
   };
+
 
   nextPage = () => {
     const { modalImageIndex } = this.state;
     const { galleryArr } = this.props;
-    this.setState({
-      modalImgIndex:
-        modalImageIndex === galleryArr.length - 1 ? 0 : modalImageIndex + 1,
-    });
+        this.setState({modalImageIndex:
+            modalImageIndex === galleryArr.length - 1
+              ? 0
+              : modalImageIndex + 1,
+        });
   };
 
-  prevPage = () => {
+    prevPage = () => {
     const { modalImageIndex } = this.state;
     const { galleryArr } = this.props;
     this.setState({
-      modalImgIndex:
+      modalImageIndex:
         modalImageIndex === 0 ? galleryArr.length - 1 : modalImageIndex - 1,
     });
   };
 
   render() {
-    const { onModal, modalImageIndex } = this.state;
+    const { showModal, modalImageIndex } = this.state;
     const { galleryArr } = this.props;
+
     return (
       <>
-        <StyledImageGallery class="gallery">
+        <StyledImageGallery className="gallery">
           {galleryArr.map(el => (
             <ImageGalleryItem
               key={el.id}
               item={el}
-              toggleModal={this.toggleModal}
+              openModal={this.openModal}
             />
           ))}
         </StyledImageGallery>
-        {onModal && (
+        {showModal && (
           <Modal
-            image={galleryArr[modalImageIndex]}
+            item={galleryArr[modalImageIndex]}
             nextPage={this.nextPage}
             prevPage={this.prevPage}
+            onClose={this.toggleModal}
           />
         )}
       </>
@@ -64,9 +73,9 @@ class ImageGallery extends Component {
   }
 }
 
-ImageGallery.propTypes = {
-  galleryArr: PropTypes.arrayOf().isRequired,
-  toggleModal: PropTypes.func.isRequired,
-};
+// ImageGallery.propTypes = {
+//   galleryArr: PropTypes.arrayOf().isRequired,
+//   toggleModal: PropTypes.func.isRequired,
+// };
 
 export default ImageGallery;

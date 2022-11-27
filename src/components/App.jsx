@@ -1,50 +1,69 @@
 import { Component } from 'react';
 import './App.css';
-import FetchUtils from '../utils/fetchApi';
+import { fetchImages, fetchMoreImages } from '../utils/fetchApi';
 import ImageGallery from './ImageGallery/';
 import Searchbar from './Searchbar/';
 import Button from './Button';
-
+import Loader from './Loader';
 
 class App extends Component {
   state = {
+    loading: false,
     imgStorage: [],
-    totalHits: 0,
+    totalHits: '',
+    page: 2,
+    query: '',
   };
 
-  onSubmit = () => {
-    this.setState({ imgStorage: [] });
-    try {
-      FetchUtils.fetchImages()
-        .then(responce => responce.json())
-        .then(images => this.setState({ imgStorage: images.hits, totalHits: images.totalHits }));
-    } catch (error) {
-      console.log('Something went wrong');
-    }
+  onSubmit = evt => {
+    evt.preventDefault();
+    const query = evt.target.elements.search.value;
+    this.setState({
+      imgStorage: [],
+      loading: true,
+    });
+    fetchImages(query)
+      .then(images =>
+        this.setState({
+          imgStorage: images.hits,
+          totalHits: images.totalHits,
+          page: 2,
+          query,
+        })
+      )
+      .catch(error => console.log('Something went wrong'))
+      .finally(() => this.setState({ loading: false }));
   };
 
-  loadMore = () => {
-    try {
-      FetchUtils.fetchMoreImages()
-        .then(responce => responce.json())
-        .then(images =>
-          this.setState({ imgStorage: [...this.state.imgStorage, ...images.hits] })
-        );
-    } catch (error) {
-      console.log('Something went wrong');
-    }
+  loadMore = evt => {
+    evt.preventDefault();
+    const { query, page, loading } = this.state;
+    this.setState({ page: page + 1, loading: true });
+    fetchMoreImages(query, page)
+      .then(images =>
+        this.setState({
+          imgStorage: [...this.state.imgStorage, ...images.hits],
+        })
+      )
+      .catch(error => {
+        console.log('Something went wrong');
+      })
+      .finally(() => this.setState({ loading: false }));
   };
 
   render() {
     const { onSubmit, loadMore } = this;
-    const { imgStorage, totalHits} = this.state;
+    const { imgStorage, totalHits, loading } = this.state;
     return (
       <>
         <Searchbar onSubmit={onSubmit} />
-        <ImageGallery galleryArr={imgStorage} />
-        {imgStorage.length < totalHits && (
-          <Button onClick={loadMore}>Load More</Button>
-        )}
+        <div className="container">
+          <ImageGallery galleryArr={imgStorage} />
+          {loading && <Loader />}
+          {imgStorage.length > 0 && imgStorage.length < totalHits && (
+            <Button onClick={loadMore}>Load More</Button>
+          )}
+        </div>
       </>
     );
   }

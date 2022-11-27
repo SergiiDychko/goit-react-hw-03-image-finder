@@ -1,17 +1,19 @@
 // import PropTypes from 'prop-types';
-import {StyledSearchbar} from './SearchbarStyles'
+import { StyledSearchbar } from './SearchbarStyles'
+import { ReactComponent as Search } from '../../icons/search.svg';
 
-const Searchbar = () => {
+const Searchbar = ({ onSubmit }) => {
   return (
     <StyledSearchbar>
-      <form className="searchForm">
+      <form className="searchForm" onSubmit={onSubmit}>
         <button type="submit" className="searchForm-button">
-          <span className="searchForm-button-label">Search</span>
+          <Search className='btnIcon' />
         </button>
 
         <input
           className="searchForm-input"
           type="text"
+          name='search'
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"

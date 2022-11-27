@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
-import { Audio } from 'react-loader-spinner';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import { ThreeDots } from 'react-loader-spinner';
+import { StyledLoader } from './LoaderStyles';
 
-const Loader = ({}) => {
+const Loader = () => {
   return (
-    <Audio
-      height="80"
-      width="80"
-      radius="9"
-      color="green"
-      ariaLabel="three-dots-loading"
-      wrapperStyle
-      wrapperClass
-    />
+    <StyledLoader>
+      <ThreeDots
+        height="80"
+        width="80"
+        radius="9"
+        color="rgba(60, 80, 180, 0.4)"
+        ariaLabel="three-dots-loading"
+      />
+    </StyledLoader>
   );
 }
 
