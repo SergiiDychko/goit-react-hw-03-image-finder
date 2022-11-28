@@ -2,11 +2,7 @@ import PropTypes from 'prop-types';
 import { StyledImageGalleryItem } from './ImageGalleryItemStyles';
 
 const ImageGalleryItem = ({ item, openModal }) => {
-  const { webformatURL, id, tags } = item;
-  
-  // const handleClickModal = () => {
-  //   toggleModal(id)
-  // }
+const { webformatURL, id, tags } = item;
 
   return (
     <StyledImageGalleryItem>
@@ -26,6 +22,7 @@ ImageGalleryItem.propTypes = {
     largeImageURL: PropTypes.string.isRequired,
     tags: PropTypes.string.isRequired,
   }).isRequired,
+  openModal: PropTypes.func.isRequired,
 };
 
 export default ImageGalleryItem;

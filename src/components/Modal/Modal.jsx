@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { StyledModal } from './ModalStyles';
 import { ReactComponent as Prev } from '../../icons/chevronleft.svg';
 import { ReactComponent as Next } from '../../icons/chevronright.svg';
@@ -56,10 +56,14 @@ class Modal extends Component {
   }
 }
 
-// Modal.propTypes = {
-//   image: PropTypes.object.isRequired,
-//   nextPage: PropTypes.func.isRequired,
-//   prevPage: PropTypes.func.isRequired,
-// };
+Modal.propTypes = {
+  item: PropTypes.shape({
+    largeImageURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }).isRequired,
+  nextPage: PropTypes.func.isRequired,
+  prevPage: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;

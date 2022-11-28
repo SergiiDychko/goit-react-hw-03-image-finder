@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { StyledSearchbar } from './SearchbarStyles'
 import { ReactComponent as Search } from '../../icons/search.svg';
 
@@ -23,6 +23,8 @@ const Searchbar = ({ onSubmit }) => {
   );
 };
 
-// Searchbar.propTypes = { }
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+}
 
 export default Searchbar;

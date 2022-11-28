@@ -1,9 +1,8 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Component } from 'react';
 import ImageGalleryItem from './ImageGalleryItem';
 import { StyledImageGallery } from './ImageGalleryStyles';
 import Modal from '../Modal';
-import { Notify } from 'notiflix';
 
 class ImageGallery extends Component {
   state = {
@@ -73,9 +72,8 @@ class ImageGallery extends Component {
   }
 }
 
-// ImageGallery.propTypes = {
-//   galleryArr: PropTypes.arrayOf().isRequired,
-//   toggleModal: PropTypes.func.isRequired,
-// };
+ImageGallery.propTypes = {
+  galleryArr: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+};
 
 export default ImageGallery;

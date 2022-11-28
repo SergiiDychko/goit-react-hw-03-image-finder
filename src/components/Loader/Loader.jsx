@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { ThreeDots } from 'react-loader-spinner';
 import { StyledLoader } from './LoaderStyles';
 
@@ -15,8 +14,5 @@ const Loader = () => {
     </StyledLoader>
   );
 }
-
-Loader.propTypes = {
-};
 
 export default Loader;
