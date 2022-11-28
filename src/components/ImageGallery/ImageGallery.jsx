@@ -6,6 +6,7 @@ import { StyledImageGallery } from './ImageGalleryStyles';
 import Modal from '../Modal';
 import Loader from '../Loader';
 import Button from '../Button';
+import { Notify } from 'notiflix';
 
 class ImageGallery extends Component {
   state = {
@@ -34,6 +35,10 @@ class ImageGallery extends Component {
         .catch(error => console.log('Something went wrong'))
         .finally(() => this.setState({ loading: false }));
     }
+    if (this.state.totalHits === 0) {
+      Notify.info('Your query could not find anything');
+      this.setState({ totalHits: '' });
+    }
 
     if ((prevState.page !== this.state.page) & (this.state.page !== 1)) {
       this.setState({ loading: true });
@@ -50,8 +55,8 @@ class ImageGallery extends Component {
 
   handleLoadMore = evt => {
     evt.preventDefault();
-    this.setState({ page: this.state.page + 1});
-    };
+    this.setState({ page: this.state.page + 1 });
+  };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
