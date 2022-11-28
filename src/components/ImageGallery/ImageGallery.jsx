@@ -1,57 +1,79 @@
 import PropTypes from 'prop-types';
 import { Component } from 'react';
+import { fetchImages } from '../../utils/fetchApi';
 import ImageGalleryItem from './ImageGalleryItem';
 import { StyledImageGallery } from './ImageGalleryStyles';
 import Modal from '../Modal';
+import Loader from '../Loader';
+import Button from '../Button';
 
 class ImageGallery extends Component {
   state = {
-    showModal: false,
+    imgStorage: [],
     modalImageIndex: 0,
+    totalHits: '',
+    page: 1,
+    loading: false,
+    showModal: false,
   };
-  
-  toggleModal = () => {
-    this.setState(({showModal}) => ({
-      showModal: !showModal,
-    }));
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.query !== this.props.query) {
+      this.setState({
+        imgStorage: [],
+        page: 1,
+        loading: true,
+      });
+      fetchImages(this.props.query, this.props.page)
+        .then(images =>
+          this.setState({
+            imgStorage: images.hits,
+            totalHits: images.totalHits,
+          })
+        )
+        .catch(error => console.log('Something went wrong'))
+        .finally(() => this.setState({ loading: false }));
+    }
+
+    if ((prevState.page !== this.state.page) & (this.state.page !== 1)) {
+      this.setState({ loading: true });
+      fetchImages(this.props.query, this.state.page)
+        .then(images =>
+          this.setState({
+            imgStorage: [...this.state.imgStorage, ...images.hits],
+          })
+        )
+        .catch(error => console.log('Something went wrong'))
+        .finally(() => this.setState({ loading: false }));
+    }
   }
 
-  openModal = (imageId) => {
-    const { galleryArr } = this.props;
-    this.toggleModal()
-    this.setState({
-        modalImageIndex: galleryArr.findIndex(image => image.id === imageId),
-    });
+  handleLoadMore = evt => {
+    evt.preventDefault();
+    this.setState({ page: this.state.page + 1});
+    };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
   };
-
-
-  nextPage = () => {
-    const { modalImageIndex } = this.state;
-    const { galleryArr } = this.props;
-        this.setState({modalImageIndex:
-            modalImageIndex === galleryArr.length - 1
-              ? 0
-              : modalImageIndex + 1,
-        });
-  };
-
-    prevPage = () => {
-    const { modalImageIndex } = this.state;
-    const { galleryArr } = this.props;
+  openModal = imageId => {
+    const { imgStorage } = this.state;
+    this.toggleModal();
     this.setState({
-      modalImageIndex:
-        modalImageIndex === 0 ? galleryArr.length - 1 : modalImageIndex - 1,
+      modalImageIndex: imgStorage.findIndex(image => image.id === imageId),
     });
   };
 
   render() {
-    const { showModal, modalImageIndex } = this.state;
-    const { galleryArr } = this.props;
+    const { imgStorage, showModal, modalImageIndex, loading, totalHits } =
+      this.state;
 
     return (
       <>
         <StyledImageGallery className="gallery">
-          {galleryArr.map(el => (
+          {imgStorage.map(el => (
             <ImageGalleryItem
               key={el.id}
               item={el}
@@ -59,11 +81,14 @@ class ImageGallery extends Component {
             />
           ))}
         </StyledImageGallery>
+        {loading && <Loader />}
+        {imgStorage.length > 0 && imgStorage.length < totalHits && (
+          <Button onClick={this.handleLoadMore}>Load More</Button>
+        )}
         {showModal && (
           <Modal
-            item={galleryArr[modalImageIndex]}
-            nextPage={this.nextPage}
-            prevPage={this.prevPage}
+            gallery={imgStorage}
+            index={modalImageIndex}
             onClose={this.toggleModal}
           />
         )}
@@ -73,7 +98,7 @@ class ImageGallery extends Component {
 }
 
 ImageGallery.propTypes = {
-  galleryArr: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  query: PropTypes.string.isRequired,
 };
 
 export default ImageGallery;
